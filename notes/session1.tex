@@ -1,0 +1,182 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{tabularx}
+\usepackage{tabulary}
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{pdflscape}
+\usepackage{caption}
+\usepackage{comment}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\newcommand{\sym}[1]{#1}
+\usepackage{subcaption}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{subcaption}
+\usepackage{mwe}
+\usepackage[none]{hyphenat}
+\title{NYU Computation in Economics Traineeship \\ Session 1 Notes \vspace{-3ex}}
+\date{\today \vspace{-3ex}}
+
+\begin{document}
+\maketitle
+\section{Day 1}
+\subsection{Getting started with Git: Workflow}
+\begin{enumerate}
+	\item Create a GitHub account
+	\item Choose a repository you want to work on by searching the website. This will be called the ``main repository'' for the project
+	\item Fork the main repository from GitHub.com. This creates a ``master branch'' of your fork in your GitHub.com account
+	\item Choose a folder in your computer where you want to create a copy of the main repository. A few alternative methods to organise your git repositories :
+	\begin{itemize}
+		\item Create one folder where you keep all your git repositories
+		\item If you have different folders for each project you are working on, within each of these folders, create a ``git\_github'' folder in which you will make a copy of the git repository
+	\end{itemize}
+	\item Clone the fork to your local machine (don’t clone the main repository) by copying the url from the Clone/Download button on the GitHub.com page for your fork by typing the following command in your terminal. This will create a copy of the folder on your computer (local master). \\
+	\texttt{git clone ``url''}
+	\item Add the main repository as a remote repository named “upstream” so that you can update your local master whenever there are changes in the main repository, and you can push changes from your local master to the main repository. Take the url from the Clone/Download button on the GitHub.com page of your main repository. \\
+	\texttt{git remote add upstream ``url''}
+	\item You can see a list of your remote repositories using: \\
+	\texttt{git remote -v}
+	\item Before making changes to files on your computer or adding new files, create a new branch. This is a local project branch, separate from the local master branch. In general, we want to avoid making changes directly to the local master branch so that the local master branch remains consistent with the main repository which is online
+	\item Create a new branch: \\ 
+	\texttt{git checkout -b ``new branch name''}
+	\item If you want to switch between branches which already exist: \\
+	\texttt{git checkout ``existing branch name''}
+	\item Make changes or add new files
+	\item Stage the new and modified files so they can be committed \\
+	\texttt{git status} shows you if there are any new or modified files \\
+	\texttt{git add ``filename''} OR \texttt{git add -A} (be careful because this uploads all files and you may end up adding files that you don’t intend to)
+	\item Commit the staged files (this saves the changes to your local project branch) \\
+	\texttt{git commit -m ``Message''} \\
+	With every commit, include a 1-2 line message explaining the changes which were made in that commit. Keep it short but descriptive
+	\item Now create a remote project branch (this is a branch of your fork of the main repo and exists on your GitHub.com account) \\
+	\texttt{git push origin ``branch name''}
+	\item In order to incorporate the changes you made to the project folder with the main repository so that all collaborators can see these changes, you need to submit a pull request on GitHub.com. Once this pull request is accepted by whoever is managing the main repository, your changes will become part of the main repository
+	\item Now update your local master to reflect the changes in the main repo \\
+	\texttt{git fetch upstream} \\
+	\texttt{git merge upstream/master}
+	\item Update your remote master to reflect changes in the main repo \\
+	\texttt{git push origin master}
+	\item Delete the local and remote project branches that your created because the task is now complete and has been incorporated in the main repo \\
+	\texttt{git branch -D ``new branch name''} \\
+	\texttt{git push origin —delete ``new branch name''}
+	\item The order in which these changes are made is important.
+	\begin{itemize}
+		\item First make changes in your local project branch (on your computer)
+		\item Push these to a remote project branch (on GitHub.com)
+		\item Submit a pull request to the main repository (on GitHub.com)
+		\item After your pull request is accepted and the main repository has been updated, update the local master
+		\item Update the remote master
+	\end{itemize}
+\end{enumerate}
+\clearpage 
+\section{Day 2}
+\subsection{Updating your local repo to reflect changes in the main repo on GitHub}
+\begin{enumerate}
+	\item Grab changes in the main repo: \texttt{git fetch upstream}
+	\item Update your local master branch: \texttt{git merge upstream/master}
+	\item Update your remote master branch: \texttt{git push origin master}
+\end{enumerate}
+
+\subsection{Merge conflict examples}
+\begin{enumerate}
+	\item Suppose you check out a local project branch and make changes to a file, then fetch upstream changes to your master where someone has made changes to the same file, there will be a merge conflict between your local master branch and local project branch
+	\item Conflicts can arise between any local branches (master vs project branch)
+	\item When merging from Remote Upstream or Remote Origin branch to your local branch
+\end{enumerate}
+
+\subsection{Dealing with a merge conflict}
+\begin{enumerate}
+	\item git reset --hard HEAD: moves your repo back to the last commit you made before the issue arised
+	\item In what direction should you merge? You want to be in your local project branch and then merge in changes from your local master branch. Because you want your local master to be consistent with the main repo (upstream), so you don’t want to mix in changes you made on your project branch until these are approved via pull request to be incorporated in the main repo.
+	\begin{itemize}
+		\item \texttt{git checkout newbranch}
+		\item \texttt{git merge master}
+	\end{itemize}
+	\item Once there is a merge conflict, open the file on your local machine, git has added a bunch of new things to the file
+	\begin{itemize}
+		\item $<<<<<$ HEAD: refers to the branch you are on
+		\item $>>>>>$ master: refers to the master branch
+		\item $==========$: Separates the stuff that is conflicted between the two versions of the file in the current branch and the master branch. 
+		\item Choose what you want to keep and save the file
+		\item Add to staging area, commit, and then merge the new branch with the master again
+	\end{itemize}
+
+	\item Merging conflict with binary files (PDF, Jupyter notebooks): Just have to pick one file or the other (and delete the rejected file), because you can’t edit changes within these files
+
+\end{enumerate}
+
+\subsection{Work flow}
+If you have made changes to your local project branch, but meanwhile changes have been made on the main repo that are merged with your local master:
+\begin{enumerate}
+	\item Merge your local project branch with your local master
+	\item Resolve any merge conflicts
+	\item Submit a pull request to upload your changes to the remote main repo
+\end{enumerate}
+
+\subsection{Sensitive files}
+To make sure any of your sensitive data doesn’t get uploaded to github in a commit, add the file name of the file to the gitignore file
+
+\subsection{Best Practices}
+\begin{enumerate}
+	\item \href{https://library.stanford.edu/research/data-management-services/data-best-practices}{Stanford Data Management Best Practices Guide}
+	\item \href{https://library.stanford.edu/research/data-management-services/data-best-practices/best-practices-file-naming}{File Naming Best Practices}
+	\item Include a readme for your file naming convention
+	\item Project builder: Keeps a record of which data file and code each figure and table came from, so that when you make a change to the data or code you know what output you need to update
+\end{enumerate}
+\clearpage
+\section{Day 3}
+\subsection{Code Lay-out Tips}
+\begin{enumerate}
+	\item Set up text editor so that tab = 4 spaces
+	\item Limit each line to 72 characters, makes it easier to view multiple code files side by side without having to scroll. 
+	\item Can set up boundaries in the text editor to mark the 72 character mark
+	\item Can also set the text editor to automatically wrap to the next line
+	\item Make sure to indent properly for better readability
+	\item Blank lines: Include 2 blank lines before and after function definitions. Avoid unnecessary blank lines. Blank lines should have no white spaces
+	\item \href{https://www.python.org/dev/peps/pep-0008/}{Python PEP8 guidelines} 
+	\item Set up a PEP8 linter in your text editor which flags parts of your code which are inconsistent with PEP8
+	\item When making in-line comments, include a space after the symbol which starts the comment
+	\item Python’s Black package, automatically formats your code to be consistent with PEP8
+\end{enumerate}
+
+\subsection{Documentation Tips}
+\begin{enumerate}
+	\item In-line comments explaining what a line or section does
+	\item Documentation for functions that you write will be larger blocks of comments, bracketed by 3 double quotes ``````...''''''
+	\item Set up a Sphinx website which outlines the documentation for your code
+	\item When writing up the paper, it’s important to include details about the estimation methods, algorithms etc. especially if results are sensitive to the estimation method. Include these details in a technical appendix. 
+	\item Computational economics is a means to an end, the focus is not the methods but the questions we can answer with them
+\end{enumerate}
+
+\subsection{ParamTools}
+\begin{enumerate}
+	\item Python package which defines your model’s parametersFeed in the type, default value, description, max and min value of each parameter in your model
+	\item If you need to make changes to your parameters, you can do this easily in one place
+\end{enumerate}
+
+\subsection{Tax Simulation Model}
+\begin{enumerate}
+
+	\item Tax policy simulation model, Evans' tax preferences project: PSLmodels/TaxBrain
+	\item Hosted on \href{https://compute.studio/PSLmodels/Tax-Brain/}{compute studio}
+	\item Change tax and benefit rates, outputs the effect on federal revenue over the next 10 years, and also the effect on the income of people in different income deciles
+\end{enumerate}
+
+\subsection{Visualization}
+\href{http://www.oselab.org/gallery}{Open Source Economics Visualizations Gallery}. \href{https://github.com/OpenSourceEcon/OGvisualizations}{Code} for all visualizations available. Uses D3 \href{https://d3js.org/}{D3} and python’s \href{https://bokeh.pydata.org/en/latest/index.html}{bokeh library}
+
+\subsection{Resources for Computational Economics}
+\begin{enumerate}
+	\item Jupyter notebooks with notes on computational economics and finance: \href{https://notes.quantecon.org/}{QuantEcon}
+	\item  Also see QuantEcon repository on GitHub
+	\item Consider applying to Open Source Economics Laboratory Bootcamp (applications open in January, will be held over 6 weeks from July to first week of August at Yale)
+	\item Python resources: \href{https://foundations-of-applied-mathematics.github.io/}{Foundation of Applied Mathematics} 
+\end{enumerate}
+
+
+
+\end{document}
